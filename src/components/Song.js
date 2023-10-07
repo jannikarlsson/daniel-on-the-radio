@@ -10,9 +10,10 @@ function Song({ song }) {
 
     return (
         <div className="notification is-success is-light">
-            <div>{getDate(song.starttimeutc)}, {getTime(song.starttimeutc)}</div>
+            <div className="has-text-weight-bold">{song.channel}</div>
+            <div className="is-size-6">{getDate(song.starttimeutc)}, {getTime(song.starttimeutc)}-{getTime(song.stoptimeutc)}</div>
             <div>{song.title}</div>
-            <div>{song.artist}</div>
+            <div>{song.artist}</div>           
         </div>
     )
 }

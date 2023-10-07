@@ -1,8 +1,8 @@
 @import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
 
 body {
-  margin-top: 2rem;
   padding: 0;
+  margin-top: 0;
 }
 
 .date-range {
@@ -12,4 +12,13 @@ body {
 .song-list {
   column-gap: 1.5rem;
   margin-top: 1rem;
+}
+
+.has-background-success-dark {
+  height: 100vh;
+}
+
+.input-row {
+  display: flex;
+  flex-direction: row;
 }
