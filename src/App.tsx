@@ -2,10 +2,11 @@ import { useState } from "react";
 import DateInput from "./components/DateInput";
 import { fetchSongsForDate } from "./api";
 import SongList from "./components/SongList";
+import { IChannelMap, ISong } from "./models/interfaces";
 
 function App() {
 
-  const channels = {
+  const channels: IChannelMap = {
     2562: 'P2 Musik',
     207: 'P4 Malmöhus',
     211: 'P4 Kristianstad',
@@ -14,10 +15,10 @@ function App() {
     132: 'P1'
   }
 
-  const [songs, setSongs] = useState([]);
-  const [date, setDate] = useState(new Date().toLocaleDateString());
+  const [songs, setSongs] = useState<ISong[]>([]);
+  const [date, setDate] = useState<string>(new Date().toLocaleDateString());
 
-  const cleanDuplicates = (songs) => {
+  const cleanDuplicates = (songs: ISong[]) => {
     const uniqueKeys = new Set();
 
     const cleanedArray = songs.filter((item) => {
@@ -32,7 +33,7 @@ function App() {
     return cleanedArray
   }
 
-  const filterForSelected = (songs) => {
+  const filterForSelected = (songs: ISong[]) => {
     const goodStrings = ['Daniel Hansson', 'Daniel (Sv) (1) Hansson', 'Akademiska Kören (Malmö)', 'Malmö Högskola', 'Akademiska Kören & Orkestern (Malmö)', 'Akademiska Orkestern (Malmö)']
 
     return songs.filter(song => {
@@ -42,7 +43,7 @@ function App() {
     });
   }
 
-  const addChannelName = (songs, channel) => {
+  const addChannelName = (songs: ISong[], channel: number) => {
     return songs.map(song => {
       return {
         ...song,
@@ -52,8 +53,8 @@ function App() {
   }
 
   const searchSongs = () => {
-    let songCollection = [];
-    const fetchData = async (channelId, day) => {
+    let songCollection: ISong[] = [];
+    const fetchData = async (channelId: number, day: string) => {
       try {
         const songsData = await fetchSongsForDate(channelId, day);
         songCollection = [...songCollection, ...addChannelName(songsData, channelId)];
@@ -62,7 +63,7 @@ function App() {
       }
     };
 
-    Object.keys(channels).forEach(channel => fetchData(channel, date))
+    Object.keys(channels).forEach(channel => fetchData(+channel, date))
 
   }
 

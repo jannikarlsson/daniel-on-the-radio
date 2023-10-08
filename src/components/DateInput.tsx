@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { ChangeEvent, useEffect } from 'react';
 import { BiSolidLeftArrow, BiSolidRightArrow } from 'react-icons/bi';
+import { IDateInputProps } from '../models/interfaces';
 
-function DateInput({ date, setDate, searchSongs }) {
+function DateInput({ date, setDate, searchSongs }: IDateInputProps) {
 
-  const handleDateChange = (e) => {
+  const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
     setDate(e.target.value)
   };
 
-  const arrowNavigate = (direction) => {
+  const arrowNavigate = (direction: string) => {
     const currentDate = new Date(date); 
     if (direction === 'left') {
       currentDate.setDate(currentDate.getDate() - 1);
