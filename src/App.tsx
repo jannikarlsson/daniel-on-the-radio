@@ -36,21 +36,25 @@ function App() {
   const filterForSelected = (songs: ISong[]) => {
     const goodStrings = ['Daniel Hansson', 'Daniel (Sv) (1) Hansson', 'Akademiska Kören (Malmö)', 'Malmö Högskola', 'Akademiska Kören & Orkestern (Malmö)', 'Akademiska Orkestern (Malmö)']
 
-    return songs.filter(song => {
+    const filteredSongs = songs.filter(song => {
       return goodStrings.some(str => {
         return song.title.includes(str) || song.artist.includes(str);
       });
     });
+
+    return filteredSongs;
   }
 
   const addChannelName = (songs: ISong[], channel: number) => {
     return songs.map(song => {
       return {
         ...song,
-        channel: channels[channel]
+        channelId: channel,
+        channel: channels[channel],
       }
     })
   }
+
 
   const searchSongs = () => {
     let songCollection: ISong[] = [];
@@ -58,7 +62,8 @@ function App() {
       try {
         const songsData = await fetchSongsForDate(channelId, day);
         songCollection = [...songCollection, ...addChannelName(songsData, channelId)];
-        setSongs(filterForSelected(cleanDuplicates(songCollection)))
+        songCollection = filterForSelected(cleanDuplicates(songCollection));
+        setSongs(songCollection);
       } catch (error) {
       }
     };

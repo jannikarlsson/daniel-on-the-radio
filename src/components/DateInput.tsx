@@ -18,6 +18,10 @@ function DateInput({ date, setDate, searchSongs }: IDateInputProps) {
     setDate(currentDate.toLocaleDateString());
   }
 
+  const isToday = () => {
+    return new Date(date).toLocaleDateString() === new Date().toLocaleDateString();
+  }
+
   useEffect(() => {
     searchSongs();
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -25,14 +29,14 @@ function DateInput({ date, setDate, searchSongs }: IDateInputProps) {
 
   return (
       <div className="is-flex is-flex-direction-row mt-5 has-text-success-light is-align-items-center">
-      <BiSolidLeftArrow className="is-flex mr-4 is-size-4" onClick={() => arrowNavigate('left')} />
+      <BiSolidLeftArrow className="is-flex mr-4 is-size-4 is-clickable" onClick={() => arrowNavigate('left')} />
       <input
-        className="input is-flex"
+        className={`input is-flex ${isToday() ? 'mr-4' : ''}`}
         type="date"
         value={date}
         onChange={handleDateChange}
       />
-      <BiSolidRightArrow className="is-flex ml-4 is-size-4" onClick={() => arrowNavigate('right')} />
+      {!isToday() && <BiSolidRightArrow className="is-flex ml-4 is-size-4 is-clickable" onClick={() => arrowNavigate('right')} />}
       </div>
   );
 }

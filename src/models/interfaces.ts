@@ -1,7 +1,9 @@
 export interface ISong {
     title: string;
     starttimeutc: string;
+    stoptimeutc: string;
     artist: string;
+    channelId?: number;
     channel?: string;
 }
 
@@ -14,3 +16,27 @@ export interface IDateInputProps {
     setDate: (date: string) => void;
     searchSongs: () => void;
   }
+
+export interface IProgram {
+    episodeid: number;
+    title: string;
+    starttimeutc: string;
+    endtimeutc: string;
+    program: {
+        id: number;
+    }
+}
+
+export interface IEpisode {
+    id: number;
+    broadcasttime: {
+        starttimeutc: string;
+    };
+    broadcast: {
+        broadcastfiles: [
+            {
+                url: string
+            }
+        ]
+    }
+}
