@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchEpisodes, fetchProgramList } from "../api";
+import { fetchEpisodes, fetchProgramList } from "../services/SongService";
 import { ISong, IProgram, IEpisode } from "../models/interfaces"
 import { extractDateTime, getTime, getDate, thirtyDayDiff } from "../utils";
 

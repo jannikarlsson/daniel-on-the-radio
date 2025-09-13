@@ -1,0 +1,76 @@
+import { IEpisode, IProgram, ISong } from "../models/interfaces";
+
+const BASE_URL = 'https://api.sr.se/api/v2';
+const DEFAULT_PARAMS = 'format=json&indent=true';
+
+type ApiParams = {
+  [key: string]: string | number;
+}
+
+interface ISongParams extends ApiParams {
+  id: number;
+  startdatetime: string;
+  size: number;
+}
+
+interface IProgramParams extends ApiParams {
+  channelid: number;
+  date: string;
+  size: number;
+}
+
+interface IEpisodeParams extends ApiParams {
+  programid: number;
+  fromdate: string;
+  size: number;
+}
+
+async function fetchApi<T, P extends ApiParams>(endpoint: string, params: P): Promise<T> {
+  try {
+    const queryParams = Object.entries(params)
+      .map(([key, value]) => `${key}=${value}`)
+      .join('&');
+    
+    const url = `${BASE_URL}/${endpoint}?${queryParams}&${DEFAULT_PARAMS}`;
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('There was a problem with the fetch operation:', error);
+    throw error;
+  }
+}
+
+export const fetchSongsForDate = async (channelId: number, day: string): Promise<ISong[]> => {
+  const params: ISongParams = {
+    id: channelId,
+    startdatetime: day,
+    size: 1000
+  };
+  const data = await fetchApi<{ song: ISong[] }, ISongParams>('playlists/getplaylistbychannelid', params);
+  return data.song;
+};
+
+export const fetchProgramList = async (channelId: number, day: string): Promise<IProgram[]> => {
+  const params: IProgramParams = {
+    channelid: channelId,
+    date: day,
+    size: 1000
+  };
+  const data = await fetchApi<{ schedule: IProgram[] }, IProgramParams>('scheduledepisodes', params);
+  return data.schedule;
+};
+
+export const fetchEpisodes = async (programId: number, day: string): Promise<IEpisode[]> => {
+  const params: IEpisodeParams = {
+    programid: programId,
+    fromdate: day,
+    size: 100
+  };
+  const data = await fetchApi<{ episodes: IEpisode[] }, IEpisodeParams>('episodes/index', params);
+  return data.episodes;
+};

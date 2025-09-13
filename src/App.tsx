@@ -1,19 +1,11 @@
 import { useState } from "react";
 import DateInput from "./components/DateInput";
-import { fetchSongsForDate } from "./api";
+import { fetchSongsForDate } from "./services/SongService";
 import SongList from "./components/SongList";
-import { IChannelMap, ISong } from "./models/interfaces";
+import { ISong } from "./models/interfaces";
+import { artist, channels } from "./config/filters";
 
 function App() {
-
-  const channels: IChannelMap = {
-    2562: 'P2 Musik',
-    207: 'P4 Malmöhus',
-    211: 'P4 Kristianstad',
-    164: 'P3',
-    163: 'P2',
-    132: 'P1'
-  }
 
   const [songs, setSongs] = useState<ISong[]>([]);
   const [date, setDate] = useState<string>(new Date().toLocaleDateString());
@@ -34,10 +26,8 @@ function App() {
   }
 
   const filterForSelected = (songs: ISong[]) => {
-    const goodStrings = ['Daniel Hansson', 'Daniel (Sv) (1) Hansson', 'Akademiska Kören (Malmö)', 'Malmö Högskola', 'Akademiska Kören & Orkestern (Malmö)', 'Akademiska Orkestern (Malmö)']
-
     const filteredSongs = songs.filter(song => {
-      return goodStrings.some(str => {
+      return artist.some(str => {
         return song.title.includes(str) || song.artist.includes(str);
       });
     });
