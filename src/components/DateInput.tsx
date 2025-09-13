@@ -1,8 +1,9 @@
 import React, { ChangeEvent, useEffect } from 'react';
 import { BiSolidLeftArrow, BiSolidRightArrow } from 'react-icons/bi';
-import { IDateInputProps } from '../models/interfaces';
+import { useSongs } from '../contexts/SongContext';
 
-function DateInput({ date, setDate, searchSongs }: IDateInputProps) {
+function DateInput() {
+  const { date, setDate, searchSongs } = useSongs();
 
   const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
     setDate(e.target.value)

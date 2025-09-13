@@ -1,7 +1,8 @@
-import { ISong } from "../models/interfaces";
 import Song from "./Song";
+import { useSongs } from "../contexts/SongContext";
 
-function SongList({ songs }: {songs: ISong[]}) {
+function SongList() {
+    const { songs } = useSongs();
     const renderSongs = songs.map((song, index) => <Song song={song} key={index} />)
     
     return (
