@@ -25,8 +25,7 @@ function DateInput() {
 
   useEffect(() => {
     searchSongs();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [date])
+  }, [searchSongs])
 
   return (
       <div className="is-flex is-flex-direction-row mt-5 has-text-success-light is-align-items-center">

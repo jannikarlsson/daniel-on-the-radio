@@ -1,5 +1,5 @@
 import { ISong } from "../models/interfaces"
-import { getTime, thirtyDayDiff } from "../utils";
+import { getTime, thirtyDayDiff } from "../utils/utils";
 import { useSong } from "../hooks/useSong";
 
 function Song({ song }: {song: ISong}) {

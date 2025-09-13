@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { fetchEpisodes, fetchProgramList } from "../services/SongService";
 import { ISong, IProgram, IEpisode } from "../models/interfaces";
-import { extractDateTime, getDate } from "../utils";
+import { extractDateTime, getDate } from "../utils/utils";
 
 interface UseSongResult {
     program: IProgram | null;

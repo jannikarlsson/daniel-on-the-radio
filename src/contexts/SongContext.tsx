@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode, useCallback } from 'react';
 import { ISong } from '../models/interfaces';
 import { fetchSongsForDate } from '../services/SongService';
 import { artist, channels } from '../config/filters';
@@ -45,7 +45,7 @@ export function SongProvider({ children }: { children: ReactNode }) {
         }));
     };
 
-  const searchSongs = () => {
+  const searchSongs = useCallback(async () => {
     let songCollection: ISong[] = [];
     const fetchData = async (channelId: number, day: string) => {
       try {
@@ -59,8 +59,9 @@ export function SongProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    Object.keys(channels).forEach(channel => fetchData(+channel, date));
-  };
+    const promises = Object.keys(channels).map(channel => fetchData(+channel, date));
+    await Promise.all(promises);
+  }, [date]);
 
   return (
     <SongContext.Provider value={{ songs, date, setDate, searchSongs }}>
