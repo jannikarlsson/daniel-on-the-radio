@@ -8,6 +8,8 @@ interface SongContextType {
   date: string;
   setDate: (date: string) => void;
   searchSongs: () => void;
+  isLoading: boolean;
+  error: string | null;
 }
 
 const SongContext = createContext<SongContextType | undefined>(undefined);
@@ -15,6 +17,8 @@ const SongContext = createContext<SongContextType | undefined>(undefined);
 export function SongProvider({ children }: { children: ReactNode }) {
   const [songs, setSongs] = useState<ISong[]>([]);
   const [date, setDate] = useState<string>(new Date().toLocaleDateString());
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const cleanDuplicates = (songs: ISong[]) => {
     const uniqueKeys = new Set();
@@ -47,6 +51,9 @@ export function SongProvider({ children }: { children: ReactNode }) {
 
   const searchSongs = useCallback(async () => {
     let songCollection: ISong[] = [];
+    setIsLoading(true);
+    setError(null);
+    
     const fetchData = async (channelId: number, day: string) => {
       try {
         const songsData = await fetchSongsForDate(channelId, day);
@@ -54,17 +61,24 @@ export function SongProvider({ children }: { children: ReactNode }) {
         songCollection = filterForSelected(cleanDuplicates(songCollection));
         setSongs(songCollection);
       } catch (error) {
+        setError(error instanceof Error ? error.message : 'Error fetching songs');
         console.error('Error fetching songs:', error);
         setSongs(songCollection);
       }
     };
 
-    const promises = Object.keys(channels).map(channel => fetchData(+channel, date));
-    await Promise.all(promises);
+    try {
+      const promises = Object.keys(channels).map(channel => fetchData(+channel, date));
+      await Promise.all(promises);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Error fetching songs');
+    } finally {
+      setIsLoading(false);
+    }
   }, [date]);
 
   return (
-    <SongContext.Provider value={{ songs, date, setDate, searchSongs }}>
+    <SongContext.Provider value={{ songs, date, setDate, searchSongs, isLoading, error }}>
       {children}
     </SongContext.Provider>
   );

@@ -1,9 +1,10 @@
 import { ISong } from "../models/interfaces"
 import { getTime, thirtyDayDiff } from "../utils/utils";
 import { useSong } from "../hooks/useSong";
+import Loader from "./Loader";
 
 function Song({ song }: {song: ISong}) {
-    const { program, episode, startTime, selectedDate } = useSong(song);
+    const { program, episode, startTime, selectedDate, isLoading, error } = useSong(song);
 
     return (
         <div className="notification is-success is-light">
@@ -11,9 +12,21 @@ function Song({ song }: {song: ISong}) {
             <div className="is-size-6">{selectedDate}, {getTime(song.starttimeutc)}-{getTime(song.stoptimeutc)}</div>
             <div>{song.title}</div>
             <div>{song.artist}</div>
-            {episode && !thirtyDayDiff(selectedDate) && <audio src={episode?.broadcast.broadcastfiles[0].url + "#t=" + (startTime-10)} controls>
-                <code> Your browser doesn't support audio tags</code>
-            </audio>}
+            {isLoading && (
+                <div className="mt-2">
+                    <Loader />
+                </div>
+            )}
+            {error && (
+                <div className="has-text-danger mt-2">
+                    {error}
+                </div>
+            )}
+            {!isLoading && !error && episode && !thirtyDayDiff(selectedDate) && (
+                <audio src={episode?.broadcast.broadcastfiles[0].url + "#t=" + (startTime-10)} controls>
+                    <code> Your browser doesn't support audio tags</code>
+                </audio>
+            )}
             {thirtyDayDiff(selectedDate) && <span className="is-italic">Det har gått längre tid än 30 dagar</span>}
         </div>
     )

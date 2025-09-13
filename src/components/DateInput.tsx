@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect } from 'react';
+import { ChangeEvent, useEffect } from 'react';
 import { BiSolidLeftArrow, BiSolidRightArrow } from 'react-icons/bi';
 import { useSongs } from '../contexts/SongContext';
 
@@ -9,14 +9,13 @@ function DateInput() {
     setDate(e.target.value)
   };
 
-  const arrowNavigate = (direction: string) => {
-    const currentDate = new Date(date); 
-    if (direction === 'left') {
-      currentDate.setDate(currentDate.getDate() - 1);
-    } else {
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
-    setDate(currentDate.toLocaleDateString());
+  const arrowNavigate = (direction: 'left' | 'right') => {
+    const currentDate = new Date(date);
+    const offset = direction === 'left' ? -1 : 1;
+    currentDate.setDate(currentDate.getDate() + offset);
+    
+    const formattedDate = currentDate.toISOString().split('T')[0];
+    setDate(formattedDate);
   }
 
   const isToday = () => {
