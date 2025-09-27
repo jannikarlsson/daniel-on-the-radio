@@ -4,8 +4,8 @@ import SongList from "./components/SongList";
 import { SongProvider, useSongs } from "./contexts/SongContext";
 import Loader from "./components/Loader";
 import HistorySection from "./components/HistorySection";
-
-type Tab = 'search' | 'history';
+import TabButtons from "./components/TabButtons";
+import { Tab } from "./models/interfaces";
 
 function AppContent() {
   const { isLoading, error } = useSongs();
@@ -20,20 +20,14 @@ function AppContent() {
       </div>
       <div className="hero-body is-align-items-flex-start">
         <div className="container is-fluid">
-          <div className="buttons has-addons is-centered">
-            <button 
-              className={`button ${activeTab === 'search' ? 'is-warning' : 'is-warning is-light'}`}
-              onClick={() => setActiveTab('search')}
-            >
-              Sök
-            </button>
-            <button 
-              className={`button ${activeTab === 'history' ? 'is-warning' : 'is-warning is-light'}`}
-              onClick={() => setActiveTab('history')}
-            >
-              Historik
-            </button>
-          </div>
+          <TabButtons 
+            options={[
+              { value: 'search' as const, label: 'Sök' },
+              { value: 'history' as const, label: 'Historik' }
+            ]} 
+            selectedValue={activeTab} 
+            onChange={setActiveTab}
+          />
 
           {activeTab === 'search' && (
             <>

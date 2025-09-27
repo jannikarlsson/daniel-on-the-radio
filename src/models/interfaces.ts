@@ -46,3 +46,10 @@ export interface ISongWithDetails extends ISong {
     episode?: IEpisode;
     startTime?: number;
 }
+
+export type Tab = 'search' | 'history';
+
+export interface ButtonOption<T> {
+    value: T;
+    label: string;
+}

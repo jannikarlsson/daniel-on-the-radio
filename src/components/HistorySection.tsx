@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { IHistoryEntry, fetchLatestFinds } from '../services/SongService';
 import Song from './Song';
 import Loader from './Loader';
+import TabButtons from './TabButtons';
 
 type CountOption = 10 | 25 | 50 | 100;
 
@@ -40,17 +41,14 @@ function HistorySection() {
             {isLoading ? (
                 <Loader />
             ) : (
-                <div className="buttons has-addons is-centered">
-                    {countOptions.map((count) => (
-                        <button 
-                            key={count}
-                            className={`button ${selectedCount === count ? 'is-warning' : 'is-warning is-light'}`}
-                            onClick={() => loadHistory(count)}
-                        >
-                            Visa {count} senaste
-                        </button>
-                    ))}
-                </div>
+                <TabButtons 
+                    options={countOptions.map(count => ({
+                        value: count,
+                        label: `Visa ${count} senaste`
+                    }))}
+                    selectedValue={selectedCount}
+                    onChange={loadHistory}
+                />
             )}
             
             {history.length > 0 && (
