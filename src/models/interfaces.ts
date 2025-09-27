@@ -49,7 +49,7 @@ export interface ISongWithDetails extends ISong {
 
 export type Tab = 'search' | 'history';
 
-export interface ButtonOption<T> {
-    value: T;
+export interface ButtonOption {
+    value: number | string;
     label: string;
 }

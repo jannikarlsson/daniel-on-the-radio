@@ -1,5 +1,3 @@
-import './loader.css';
-
 function Loader() {
   return (
     <div className="has-text-centered p-4">

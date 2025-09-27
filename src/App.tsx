@@ -1,14 +1,18 @@
 import { useState } from "react";
-import DateInput from "./components/DateInput";
-import SongList from "./components/SongList";
+import SearchResults from "./components/SearchResults";
 import { SongProvider, useSongs } from "./contexts/SongContext";
 import Loader from "./components/Loader";
 import HistorySection from "./components/HistorySection";
 import TabButtons from "./components/TabButtons";
-import { Tab } from "./models/interfaces";
+import { Tab, ButtonOption } from "./models/interfaces";
+
+const TAB_OPTIONS: ButtonOption[] = [
+  { value: 'search', label: 'Sök' },
+  { value: 'history', label: 'Historik' }
+];
 
 function AppContent() {
-  const { isLoading, error } = useSongs();
+  const { isLoading, error, songs } = useSongs();
   const [activeTab, setActiveTab] = useState<Tab>('search');
 
   return (
@@ -21,31 +25,13 @@ function AppContent() {
       <div className="hero-body is-align-items-flex-start">
         <div className="container is-fluid">
           <TabButtons 
-            options={[
-              { value: 'search' as const, label: 'Sök' },
-              { value: 'history' as const, label: 'Historik' }
-            ]} 
+            options={TAB_OPTIONS} 
             selectedValue={activeTab} 
-            onChange={setActiveTab}
+            onChange={value => setActiveTab(value as Tab)}
           />
 
           {activeTab === 'search' && (
-            <>
-              <DateInput />
-              {error && (
-                <div className="notification is-danger is-light mt-4">
-                  <div className="has-text-weight-bold">Error</div>
-                  <div>{error}</div>
-                </div>
-              )}
-              {isLoading ? (
-                <div className="mt-4">
-                  <Loader />
-                </div>
-              ) : (
-                <SongList />
-              )}
-            </>
+            <SearchResults isLoading={isLoading} error={error} songs={songs} />
           )}
 
           {activeTab === 'history' && <HistorySection />}

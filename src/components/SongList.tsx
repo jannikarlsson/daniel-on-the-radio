@@ -1,15 +1,20 @@
 import Song from "./Song";
-import { useSongs } from "../contexts/SongContext";
+import { ISongWithDetails } from "../models/interfaces";
 
-function SongList() {
-    const { songs } = useSongs();
-    const renderSongs = songs.map((song, index) => <Song song={song} key={index} />)
-    
+interface SongListProps {
+    songs: ISongWithDetails[];
+}
+
+function SongList({ songs }: SongListProps) {
     return (
         <div className="song-list is-centered">
-            {renderSongs.length ? renderSongs : <div className="has-text-warning-light has-text-centered">Nej.</div>}
+            {songs.map((song, index) => (
+                <div key={index} className="mb-4">
+                    <Song song={song} />
+                </div>
+            ))}
         </div>
-    )
+    );
 }
 
 export default SongList;

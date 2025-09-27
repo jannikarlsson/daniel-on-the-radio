@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { IHistoryEntry, fetchLatestFinds } from '../services/SongService';
-import Song from './Song';
 import Loader from './Loader';
 import TabButtons from './TabButtons';
+import SongList from './SongList';
 
 type CountOption = 10 | 25 | 50 | 100;
 
@@ -47,31 +47,19 @@ function HistorySection() {
                         label: `Visa ${count} senaste`
                     }))}
                     selectedValue={selectedCount}
-                    onChange={loadHistory}
+                    onChange={value => loadHistory(Number(value) as CountOption)}
                 />
             )}
             
-            {history.length > 0 && (
+            {!isLoading && (
                 <div className="content mt-4">
-                    <h3 className="has-text-warning-light has-text-centered">Senaste fynd</h3>
-                    <div className="song-list">
-                        {history.map((entry, entryIndex) => (
-                            <div key={entry.date} className="mb-5">
-                                {entry.songs.map((song, songIndex) => (
-                                    <Song 
-                                        key={`${entryIndex}-${songIndex}`}
-                                        song={song} 
-                                    />
-                                ))}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
-
-            {!isLoading && selectedCount && history.length === 0 && (
-                <div className="has-text-warning-light has-text-centered mt-4">
-                    Inga tidigare fynd hittades.
+                    {history.length > 0 ? (
+                        <SongList songs={history.flatMap(entry => entry.songs)} />
+                    ) : selectedCount ? (
+                        <div className="has-text-warning-light has-text-centered mt-4">
+                            Inga tidigare fynd hittades.
+                        </div>
+                    ) : null}
                 </div>
             )}
         </div>
