@@ -40,3 +40,9 @@ export interface IEpisode {
         ]
     }
 }
+
+export interface ISongWithDetails extends ISong {
+    program?: IProgram;
+    episode?: IEpisode;
+    startTime?: number;
+}
