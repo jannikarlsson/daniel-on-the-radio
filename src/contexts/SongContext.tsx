@@ -102,9 +102,7 @@ export function SongProvider({ children }: { children: ReactNode }) {
       // Only use cache if the date is not today
       if (date && !isToday(date)) {
         const cachedSongs = await fetchSongsFromCache(date);
-        console.log('Fetched cached songs:', cachedSongs, date);
         if (cachedSongs) {
-          console.log("found cached songs, using them");
           setSongs(cachedSongs as ISongWithDetails[]);
           setIsLoading(false);
           return;

@@ -6,7 +6,6 @@
  */
 export function isToday(dateStr: string | null | undefined): boolean {
     const todayStr = new Date().toLocaleDateString();
-    console.log(todayStr, dateStr);
     return !!todayStr && !!dateStr && todayStr === dateStr;
 }
 /**

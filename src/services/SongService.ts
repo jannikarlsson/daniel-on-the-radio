@@ -98,7 +98,8 @@ export const saveSongsToDb = async (date: string, songs: ISongWithDetails[]): Pr
       },
       body: JSON.stringify({
         date,
-        songs
+        songs,
+        upsert: true
       })
     });
   } catch (error) {
