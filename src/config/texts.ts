@@ -4,7 +4,8 @@ const texts = {
   },
   history: {
     button: (count: number) => `Visa ${count} senaste`,
-    empty: "Inga tidigare fynd hittades."
+    empty: "Inga tidigare fynd hittades.",
+    errorTitle: "Något gick fel"
   },
   search: {
     errorTitle: "Något gick fel",

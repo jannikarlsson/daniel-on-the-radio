@@ -7,7 +7,7 @@ import { extractDateTime, getDate, thirtyDayDiff, isToday } from '../utils/utils
 interface SongContextType {
   songs: ISongWithDetails[];
   date: string;
-  setDate: (date: string) => void;
+  setDate: (date: string) => void; // eslint-disable-line no-unused-vars
   searchSongs: () => void;
   isLoading: boolean;
   error: string | null;

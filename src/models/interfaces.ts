@@ -11,12 +11,6 @@ export interface IChannelMap {
     [key: number]: string;
 }
 
-export interface IDateInputProps {
-    date: string;
-    setDate: (date: string) => void;
-    searchSongs: () => void;
-  }
-
 export interface IProgram {
     episodeid: number;
     title: string;

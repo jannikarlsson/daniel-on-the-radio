@@ -1,9 +1,9 @@
-import { ButtonOption, Tab } from '../models/interfaces';
+import { ButtonOption } from '../models/interfaces';
 
 interface TabButtonsProps<T> {
     options: ButtonOption<T>[];
     selectedValue: T | null;
-    onChange: (value: T) => void;
+    onChange: (value: T) => void; // eslint-disable-line no-unused-vars
 }
 
 function TabButtons<T>({ options, selectedValue, onChange }: TabButtonsProps<T>) {
