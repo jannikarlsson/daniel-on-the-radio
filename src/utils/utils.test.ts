@@ -48,3 +48,5 @@ describe('getTime', () => {
     expect(getTime(undefined)).toBeNull();
   });
 });
+
+export {}
