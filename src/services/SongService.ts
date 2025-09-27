@@ -1,4 +1,4 @@
-import { IEpisode, IProgram, ISong } from "../models/interfaces";
+import { IEpisode, IProgram, ISong, ISongWithDetails } from "../models/interfaces";
 
 const BASE_URL = 'https://api.sr.se/api/v2';
 const DEFAULT_PARAMS = 'format=json&indent=true';
@@ -45,6 +45,20 @@ async function fetchApi<T, P extends ApiParams>(endpoint: string, params: P): Pr
   }
 }
 
+export const fetchSongsFromCache = async (day: string): Promise<ISong[] | null> => {
+  try {
+    const cachedResponse = await fetch(`/.netlify/functions/getSongs?date=${day}`);
+    const cachedData = await cachedResponse.json();
+    
+    if (cachedData.songs) {
+      return cachedData.songs;
+    }
+  } catch (error) {
+    console.warn('Error fetching from cache:', error);
+  }
+  return null;
+};
+
 export const fetchSongsForDate = async (channelId: number, day: string): Promise<ISong[]> => {
   const params: ISongParams = {
     id: channelId,
@@ -73,4 +87,22 @@ export const fetchEpisodes = async (programId: number, day: string): Promise<IEp
   };
   const data = await fetchApi<{ episodes: IEpisode[] }, IEpisodeParams>('episodes/index', params);
   return data.episodes;
+};
+
+export const saveSongsToDb = async (date: string, songs: ISongWithDetails[]): Promise<void> => {
+  try {
+    await fetch('/.netlify/functions/saveSongs', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        date,
+        songs
+      })
+    });
+  } catch (error) {
+    console.warn('Error saving to database:', error);
+    throw error;
+  }
 };

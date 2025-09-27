@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, ReactNode, useCallback } from 'react';
-import { ISong, IProgram, ISongWithDetails } from '../models/interfaces';
-import { fetchSongsForDate, fetchProgramList, fetchEpisodes } from '../services/SongService';
+import { ISong, ISongWithDetails, IProgram } from '../models/interfaces';
+import { fetchSongsForDate, fetchProgramList, fetchEpisodes, saveSongsToDb, fetchSongsFromCache } from '../services/SongService';
 import { artist, channels } from '../config/filters';
 import { extractDateTime, getDate, thirtyDayDiff } from '../utils/utils';
 
@@ -34,21 +34,21 @@ export function SongProvider({ children }: { children: ReactNode }) {
     return cleanedArray;
   };
 
-    const filterForSelected = (songs: ISong[]): ISong[] => {
-        return songs.filter(song => {
-            return artist.some(str => {
-                return song.title.includes(str) || song.artist.includes(str);
-            });
-        });
-    };
+  const filterForSelected = (songs: ISong[]): ISong[] => {
+      return songs.filter(song => {
+          return artist.some(str => {
+              return song.title.includes(str) || song.artist.includes(str);
+          });
+      });
+  };
 
-    const addChannelName = (songs: ISong[], channel: number): ISong[] => {
-        return songs.map(song => ({
-            ...song,
-            channelId: channel,
-            channel: channels[channel],
-        }));
-    };
+  const addChannelName = (songs: ISong[], channel: number): ISong[] => {
+      return songs.map(song => ({
+          ...song,
+          channelId: channel,
+          channel: channels[channel],
+      }));
+  };
 
   const enrichSongWithDetails = async (song: ISong): Promise<ISongWithDetails> => {
     const selectedDate = getDate(song.starttimeutc);
@@ -99,7 +99,17 @@ export function SongProvider({ children }: { children: ReactNode }) {
     setError(null);
     
     try {
-      // Fetch songs from all channels first
+      // First check if we have cached data for this date
+      const cachedSongs = await fetchSongsFromCache(date);
+      console.log('Fetched cached songs:', cachedSongs, date);
+      if (cachedSongs) {
+        console.log("found cached songs, using them");
+        setSongs(cachedSongs as ISongWithDetails[]);
+        setIsLoading(false);
+        return;
+      }
+
+      // If no cached data, fetch songs from all channels
       const fetchPromises = Object.keys(channels).map(async (channel) => {
         try {
           const channelId = +channel;
@@ -117,8 +127,15 @@ export function SongProvider({ children }: { children: ReactNode }) {
       allSongs = filterForSelected(cleanDuplicates(channelResults.flat()));
       
       // Enrich songs with program and episode details
-      const enrichedSongs = await Promise.all(allSongs.map(enrichSongWithDetails));
+      const enrichedSongs = await Promise.all(allSongs.map(song => enrichSongWithDetails(song))) as ISongWithDetails[];
       setSongs(enrichedSongs);
+
+      // Save the enriched songs to the database
+      try {
+        await saveSongsToDb(date, enrichedSongs);
+      } catch (error) {
+        console.warn('Error saving to database:', error);
+      }
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Error fetching songs');
       setSongs(allSongs);
