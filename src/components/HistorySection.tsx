@@ -3,19 +3,22 @@ import { IHistoryEntry, fetchLatestFinds } from '../services/SongService';
 import Song from './Song';
 import Loader from './Loader';
 
+type CountOption = 10 | 25 | 50 | 100;
+
 function HistorySection() {
     const [history, setHistory] = useState<IHistoryEntry[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [isExpanded, setIsExpanded] = useState(false);
+    const [selectedCount, setSelectedCount] = useState<CountOption | null>(null);
+    const countOptions: CountOption[] = [10, 25, 50, 100];
 
-    const loadHistory = async () => {
+    const loadHistory = async (count: CountOption) => {
         setIsLoading(true);
         setError(null);
+        setSelectedCount(count);
         try {
-            const data = await fetchLatestFinds();
+            const data = await fetchLatestFinds(count);
             setHistory(data);
-            setIsExpanded(true);
         } catch (error) {
             setError('Failed to fetch history');
         } finally {
@@ -34,23 +37,28 @@ function HistorySection() {
 
     return (
         <div className="mt-5">
-            {!isExpanded && (
-                <button 
-                    className="button is-success is-light is-fullwidth"
-                    onClick={loadHistory}
-                    disabled={isLoading}
-                >
-                    {isLoading ? <Loader /> : 'Visa de 10 senaste fynden'}
-                </button>
+            {isLoading ? (
+                <Loader />
+            ) : (
+                <div className="buttons has-addons is-centered">
+                    {countOptions.map((count) => (
+                        <button 
+                            key={count}
+                            className={`button ${selectedCount === count ? 'is-warning' : 'is-warning is-light'}`}
+                            onClick={() => loadHistory(count)}
+                        >
+                            Visa {count} senaste
+                        </button>
+                    ))}
+                </div>
             )}
             
-            {isExpanded && history.length > 0 && (
-                <div className="content">
-                    <h3 className="has-text-success-light has-text-centered">Senaste fynd</h3>
+            {history.length > 0 && (
+                <div className="content mt-4">
+                    <h3 className="has-text-warning-light has-text-centered">Senaste fynd</h3>
                     <div className="song-list">
                         {history.map((entry, entryIndex) => (
                             <div key={entry.date} className="mb-5">
-                                <div className="has-text-success-light mb-2">Datum: {entry.date}</div>
                                 {entry.songs.map((song, songIndex) => (
                                     <Song 
                                         key={`${entryIndex}-${songIndex}`}
@@ -63,8 +71,8 @@ function HistorySection() {
                 </div>
             )}
 
-            {isExpanded && history.length === 0 && (
-                <div className="has-text-success-light has-text-centered">
+            {!isLoading && selectedCount && history.length === 0 && (
+                <div className="has-text-warning-light has-text-centered mt-4">
                     Inga tidigare fynd hittades.
                 </div>
             )}

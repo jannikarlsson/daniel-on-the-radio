@@ -9,11 +9,13 @@ exports.handler = async (event, context) => {
     const db = await connectToDatabase();
     const collection = db.collection('radio');
     
-    // Find documents that have songs, sort by date descending, limit to 10
+    const count = parseInt(event.queryStringParameters?.count || '10');
+    
+    // Find documents that have songs, sort by date descending, limit to requested count
     const results = await collection
       .find({ songs: { $exists: true, $ne: [] } })
       .sort({ date: -1 })
-      .limit(10)
+      .limit(count)
       .toArray();
     
     return {

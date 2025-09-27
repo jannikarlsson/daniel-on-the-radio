@@ -112,9 +112,9 @@ export interface IHistoryEntry {
   songs: ISongWithDetails[];
 }
 
-export const fetchLatestFinds = async (): Promise<IHistoryEntry[]> => {
+export const fetchLatestFinds = async (count: number = 10): Promise<IHistoryEntry[]> => {
   try {
-    const response = await fetch('/.netlify/functions/getLatestFinds');
+    const response = await fetch(`/.netlify/functions/getLatestFinds?count=${count}`);
     const data = await response.json();
     return data.results;
   } catch (error) {

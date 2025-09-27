@@ -7,7 +7,7 @@ function SongList() {
     
     return (
         <div className="song-list is-centered">
-            {renderSongs.length ? renderSongs : <div className="has-text-success-light has-text-centered">Nej.</div>}
+            {renderSongs.length ? renderSongs : <div className="has-text-warning-light has-text-centered">Nej.</div>}
         </div>
     )
 }
