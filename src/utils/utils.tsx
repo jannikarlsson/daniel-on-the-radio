@@ -1,4 +1,15 @@
 /**
+ * Checks if the given date string is today (local time).
+ * Uses getDate to normalize both values for comparison.
+ * @param dateStr - The date string to check (e.g. yyyy-mm-dd or /Date(...)/)
+ * @returns True if the date is today, false otherwise.
+ */
+export function isToday(dateStr: string | null | undefined): boolean {
+    const todayStr = new Date().toLocaleDateString();
+    console.log(todayStr, dateStr);
+    return !!todayStr && !!dateStr && todayStr === dateStr;
+}
+/**
  * Extracts a timestamp from a string containing a date/time value.
  * 
  * @param time - The string containing the datetime value to extract

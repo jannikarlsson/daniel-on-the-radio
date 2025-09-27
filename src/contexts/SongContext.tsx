@@ -2,7 +2,7 @@ import { createContext, useContext, useState, ReactNode, useCallback } from 'rea
 import { ISong, ISongWithDetails, IProgram } from '../models/interfaces';
 import { fetchSongsForDate, fetchProgramList, fetchEpisodes, saveSongsToDb, fetchSongsFromCache } from '../services/SongService';
 import { artist, channels } from '../config/filters';
-import { extractDateTime, getDate, thirtyDayDiff } from '../utils/utils';
+import { extractDateTime, getDate, thirtyDayDiff, isToday } from '../utils/utils';
 
 interface SongContextType {
   songs: ISongWithDetails[];
@@ -99,14 +99,16 @@ export function SongProvider({ children }: { children: ReactNode }) {
     setError(null);
     
     try {
-      // First check if we have cached data for this date
-      const cachedSongs = await fetchSongsFromCache(date);
-      console.log('Fetched cached songs:', cachedSongs, date);
-      if (cachedSongs) {
-        console.log("found cached songs, using them");
-        setSongs(cachedSongs as ISongWithDetails[]);
-        setIsLoading(false);
-        return;
+      // Only use cache if the date is not today
+      if (date && !isToday(date)) {
+        const cachedSongs = await fetchSongsFromCache(date);
+        console.log('Fetched cached songs:', cachedSongs, date);
+        if (cachedSongs) {
+          console.log("found cached songs, using them");
+          setSongs(cachedSongs as ISongWithDetails[]);
+          setIsLoading(false);
+          return;
+        }
       }
 
       // If no cached data, fetch songs from all channels
