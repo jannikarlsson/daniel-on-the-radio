@@ -1,5 +1,6 @@
 import { ISongWithDetails } from "../models/interfaces";
 import { getTime, getDate } from "../utils/utils";
+import texts from "../config/texts";
 
 function Song({ song }: { song: ISongWithDetails }) {
     const selectedDate = getDate(song.starttimeutc);
@@ -14,10 +15,10 @@ function Song({ song }: { song: ISongWithDetails }) {
                     <div>{song.artist}</div>
                     {song.episode ? (
                         <audio src={song.episode.broadcast.broadcastfiles[0].url + "#t=" + (song.startTime ? song.startTime - 10 : 0)} controls className="mt-4" >
-                            <code>Your browser doesn't support audio tags</code>
+                            <code>{texts.song.audioFallback}</code>
                         </audio>
                     ) : (
-                        <div className="is-italic mt-4">Det har gått längre tid än 30 dagar</div>
+                        <div className="is-italic mt-4">{texts.song.noAudio}</div>
                     )}
                 </div>
             </div>

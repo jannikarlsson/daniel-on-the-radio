@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { IHistoryEntry, fetchLatestFinds } from '../services/SongService';
 import Loader from './Loader';
 import TabButtons from './TabButtons';
+import texts from '../config/texts';
 import SongList from './SongList';
 
 type CountOption = 10 | 25 | 50 | 100;
@@ -41,13 +42,13 @@ function HistorySection() {
             {isLoading ? (
                 <Loader />
             ) : (
-                <TabButtons 
+                <TabButtons<CountOption> 
                     options={countOptions.map(count => ({
                         value: count,
-                        label: `Visa ${count} senaste`
+                        label: texts.history.button(count)
                     }))}
                     selectedValue={selectedCount}
-                    onChange={value => loadHistory(Number(value) as CountOption)}
+                    onChange={value => loadHistory(value)}
                 />
             )}
             
@@ -57,7 +58,7 @@ function HistorySection() {
                         <SongList songs={history.flatMap(entry => entry.songs)} />
                     ) : selectedCount ? (
                         <div className="has-text-warning-light has-text-centered mt-4">
-                            Inga tidigare fynd hittades.
+                            {texts.history.empty}
                         </div>
                     ) : null}
                 </div>

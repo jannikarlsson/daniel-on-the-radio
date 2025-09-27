@@ -1,14 +1,14 @@
 import { useState } from "react";
 import SearchResults from "./components/SearchResults";
 import { SongProvider, useSongs } from "./contexts/SongContext";
-import Loader from "./components/Loader";
 import HistorySection from "./components/HistorySection";
 import TabButtons from "./components/TabButtons";
 import { Tab, ButtonOption } from "./models/interfaces";
+import texts from "./config/texts";
 
-const TAB_OPTIONS: ButtonOption[] = [
-  { value: 'search', label: 'Sök' },
-  { value: 'history', label: 'Historik' }
+const TAB_OPTIONS: ButtonOption<Tab>[] = [
+  { value: 'search', label: texts.tabs.search },
+  { value: 'history', label: texts.tabs.history }
 ];
 
 function AppContent() {
@@ -19,7 +19,7 @@ function AppContent() {
     <section className="hero has-background-warning-dark is-fullheight">
       <div className="hero-head">
         <div className="is-size-6 has-text-centered has-text-warning-dark p-4 has-background-warning-light">
-          Har Daniel Hansson varit på radio nu igen?
+          {texts.app.title}
         </div>
       </div>
       <div className="hero-body is-align-items-flex-start">
@@ -27,7 +27,7 @@ function AppContent() {
           <TabButtons 
             options={TAB_OPTIONS} 
             selectedValue={activeTab} 
-            onChange={value => setActiveTab(value as Tab)}
+            onChange={value => setActiveTab(value)}
           />
 
           {activeTab === 'search' && (

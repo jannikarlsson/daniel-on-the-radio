@@ -1,12 +1,12 @@
-import { ButtonOption } from '../models/interfaces';
+import { ButtonOption, Tab } from '../models/interfaces';
 
-interface TabButtonsProps {
-    options: ButtonOption[];
-    selectedValue: number | string | null;
-    onChange: (value: number | string) => void;
+interface TabButtonsProps<T> {
+    options: ButtonOption<T>[];
+    selectedValue: T | null;
+    onChange: (value: T) => void;
 }
 
-function TabButtons({ options, selectedValue, onChange }: TabButtonsProps) {
+function TabButtons<T>({ options, selectedValue, onChange }: TabButtonsProps<T>) {
     return (
         <div className="buttons has-addons is-centered">
             {options.map((option) => (

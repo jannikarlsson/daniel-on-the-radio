@@ -2,6 +2,7 @@ import SongList from "./SongList";
 import Loader from "./Loader";
 import DateInput from "./DateInput";
 import { ISongWithDetails } from "../models/interfaces";
+import texts from "../config/texts";
 
 interface SearchResultsProps {
   isLoading: boolean;
@@ -15,7 +16,7 @@ function SearchResults({ isLoading, error, songs }: SearchResultsProps) {
       <DateInput />
       {error && (
         <div className="notification is-danger is-light mt-4">
-          <div className="has-text-weight-bold">Error</div>
+          <div className="has-text-weight-bold">{texts.search.errorTitle}</div>
           <div>{error}</div>
         </div>
       )}
@@ -26,7 +27,7 @@ function SearchResults({ isLoading, error, songs }: SearchResultsProps) {
       ) : songs.length > 0 ? (
         <SongList songs={songs} />
       ) : (
-        <div className="has-text-warning-light has-text-centered mt-4">Nej.</div>
+  <div className="has-text-warning-light has-text-centered mt-4">{texts.search.empty}</div>
       )}
     </>
   );
