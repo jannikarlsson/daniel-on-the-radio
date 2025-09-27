@@ -5,6 +5,9 @@ import tseslint from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
 
 const config = [
+  {
+    ignores: ['**/*.test.ts', '**/*.test.tsx'],
+  },
   js.configs.recommended,
   {
     files: ['**/*.ts', '**/*.tsx'],
