@@ -2,6 +2,7 @@ import DateInput from "./components/DateInput";
 import SongList from "./components/SongList";
 import { SongProvider, useSongs } from "./contexts/SongContext";
 import Loader from "./components/Loader";
+import HistorySection from "./components/HistorySection";
 
 function AppContent() {
   const { isLoading, error } = useSongs();
@@ -24,7 +25,10 @@ function AppContent() {
             <Loader />
           </div>
         ) : (
-          <SongList />
+          <>
+            <SongList />
+            <HistorySection />
+          </>
         )}
       </div>
     </div>

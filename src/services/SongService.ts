@@ -106,3 +106,19 @@ export const saveSongsToDb = async (date: string, songs: ISongWithDetails[]): Pr
     throw error;
   }
 };
+
+export interface IHistoryEntry {
+  date: string;
+  songs: ISongWithDetails[];
+}
+
+export const fetchLatestFinds = async (): Promise<IHistoryEntry[]> => {
+  try {
+    const response = await fetch('/.netlify/functions/getLatestFinds');
+    const data = await response.json();
+    return data.results;
+  } catch (error) {
+    console.warn('Error fetching latest finds:', error);
+    throw error;
+  }
+};
