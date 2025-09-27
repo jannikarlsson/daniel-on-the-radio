@@ -3,7 +3,6 @@ const texts = {
     title: "Har Daniel Hansson varit på radio nu igen?"
   },
   history: {
-    button: (count: number) => `Visa ${count} senaste`,
     empty: "Inga tidigare fynd hittades.",
     errorTitle: "Något gick fel"
   },

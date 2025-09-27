@@ -5,8 +5,8 @@ import App from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
+const isDev = process.env.NODE_ENV === 'development';
+
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  isDev ? <App /> : <React.StrictMode><App /></React.StrictMode>
 );

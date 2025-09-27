@@ -25,6 +25,7 @@ const config = [
         fetch: 'readonly',
         HTMLElement: 'readonly',
         HTMLInputElement: 'readonly',
+        process: 'readonly',
       },
     },
     plugins: {

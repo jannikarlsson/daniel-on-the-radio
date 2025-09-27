@@ -23,7 +23,7 @@ function AppContent() {
         </div>
       </div>
       <div className="hero-body is-align-items-flex-start">
-        <div className="container is-fluid">
+  <div className="container is-fluid no-side-padding">
           <TabButtons 
             options={TAB_OPTIONS} 
             selectedValue={activeTab} 

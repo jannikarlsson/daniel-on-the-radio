@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { IHistoryEntry, fetchLatestFinds } from '../services/SongService';
 import Loader from './Loader';
 import TabButtons from './TabButtons';
@@ -11,13 +11,12 @@ function HistorySection() {
     const [history, setHistory] = useState<IHistoryEntry[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [selectedCount, setSelectedCount] = useState<CountOption | null>(null);
+    const [selectedCount, setSelectedCount] = useState<CountOption>(10);
     const countOptions: CountOption[] = [10, 25, 50, 100];
 
     const loadHistory = async (count: CountOption) => {
         setIsLoading(true);
         setError(null);
-        setSelectedCount(count);
         try {
             const data = await fetchLatestFinds(count);
             setHistory(data);
@@ -27,6 +26,10 @@ function HistorySection() {
             setIsLoading(false);
         }
     };
+
+    useEffect(() => {
+        loadHistory(selectedCount);
+    }, [selectedCount]);
 
     if (error) {
         return (
@@ -45,10 +48,10 @@ function HistorySection() {
                 <TabButtons<CountOption> 
                     options={countOptions.map(count => ({
                         value: count,
-                        label: texts.history.button(count)
+                        label: count.toString()
                     }))}
                     selectedValue={selectedCount}
-                    onChange={value => loadHistory(value)}
+                    onChange={value => setSelectedCount(value)}
                 />
             )}
             

@@ -23,6 +23,11 @@ body {
   flex-direction: row;
 }
 
+.no-side-padding {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
 .loader {
     border: 5px solid #dbf1e4;
     border-radius: 50%;
