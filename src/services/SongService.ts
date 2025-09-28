@@ -25,6 +25,14 @@ interface IEpisodeParams extends ApiParams {
   size: number;
 }
 
+/**
+ * Generic API fetcher for SR API endpoints.
+ * @template T - Response type
+ * @template P - Params type
+ * @param endpoint - API endpoint (relative to BASE_URL)
+ * @param params - Query parameters for the request
+ * @returns Parsed JSON response of type T
+ */
 async function fetchApi<T, P extends ApiParams>(endpoint: string, params: P): Promise<T> {
   try {
     const queryParams = Object.entries(params)
@@ -45,7 +53,12 @@ async function fetchApi<T, P extends ApiParams>(endpoint: string, params: P): Pr
   }
 }
 
-export const fetchSongsFromCache = async (day: string): Promise<ISong[] | null> => {
+/**
+ * Fetches songs for a given day from the Netlify cache function.
+ * @param day - Date string (yyyy-mm-dd)
+ * @returns Array of songs with details, or null if not found
+ */
+export const fetchSongsFromCache = async (day: string): Promise<ISongWithDetails[] | null> => {
   try {
     const cachedResponse = await fetch(`/.netlify/functions/getSongs?date=${day}`);
     const cachedData = await cachedResponse.json();
@@ -59,6 +72,12 @@ export const fetchSongsFromCache = async (day: string): Promise<ISong[] | null> 
   return null;
 };
 
+/**
+ * Fetches songs for a specific channel and date from SR API.
+ * @param channelId - Channel ID
+ * @param day - Date string (yyyy-mm-dd)
+ * @returns Array of songs
+ */
 export const fetchSongsForDate = async (channelId: number, day: string): Promise<ISong[]> => {
   const params: ISongParams = {
     id: channelId,
@@ -69,6 +88,12 @@ export const fetchSongsForDate = async (channelId: number, day: string): Promise
   return data.song;
 };
 
+/**
+ * Fetches scheduled programs for a channel and date from SR API.
+ * @param channelId - Channel ID
+ * @param day - Date string (yyyy-mm-dd)
+ * @returns Array of programs
+ */
 export const fetchProgramList = async (channelId: number, day: string): Promise<IProgram[]> => {
   const params: IProgramParams = {
     channelid: channelId,
@@ -79,6 +104,12 @@ export const fetchProgramList = async (channelId: number, day: string): Promise<
   return data.schedule;
 };
 
+/**
+ * Fetches episodes for a program and date from SR API.
+ * @param programId - Program ID
+ * @param day - Date string (yyyy-mm-dd)
+ * @returns Array of episodes
+ */
 export const fetchEpisodes = async (programId: number, day: string): Promise<IEpisode[]> => {
   const params: IEpisodeParams = {
     programid: programId,
@@ -89,6 +120,12 @@ export const fetchEpisodes = async (programId: number, day: string): Promise<IEp
   return data.episodes;
 };
 
+/**
+ * Saves songs to the database using Netlify function.
+ * @param date - Date string (yyyy-mm-dd)
+ * @param songs - Array of songs with details
+ * @returns Promise that resolves when save is complete
+ */
 export const saveSongsToDb = async (date: string, songs: ISongWithDetails[]): Promise<void> => {
   try {
     await fetch('/.netlify/functions/saveSongs', {
@@ -113,6 +150,11 @@ export interface IHistoryEntry {
   songs: ISongWithDetails[];
 }
 
+/**
+ * Fetches the latest finds (recently saved songs) from the database.
+ * @param count - Number of entries to fetch (default 10)
+ * @returns Array of history entries
+ */
 export const fetchLatestFinds = async (count: number = 10): Promise<IHistoryEntry[]> => {
   try {
     const response = await fetch(`/.netlify/functions/getLatestFinds?count=${count}`);

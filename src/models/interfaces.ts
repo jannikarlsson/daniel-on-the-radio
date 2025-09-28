@@ -1,3 +1,4 @@
+/* eslint-disable */
 export interface ISong {
     title: string;
     starttimeutc: string;
@@ -41,7 +42,10 @@ export interface ISongWithDetails extends ISong {
     startTime?: number;
 }
 
-export type Tab = 'search' | 'history';
+export enum Tab {
+    Search = 'search',
+    History = 'history'
+}
 
 export interface ButtonOption<T> {
     value: T;

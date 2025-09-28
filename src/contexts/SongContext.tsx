@@ -35,11 +35,14 @@ export function SongProvider({ children }: { children: ReactNode }) {
   };
 
   const filterForSelected = (songs: ISong[]): ISong[] => {
-      return songs.filter(song => {
-          return artist.some(str => {
-              return song.title.includes(str) || song.artist.includes(str);
-          });
+    return songs.filter(song => {
+      const titleLower = song.title.toLowerCase();
+      const artistLower = song.artist.toLowerCase();
+      return artist.some(str => {
+        const strLower = str.toLowerCase();
+        return titleLower.includes(strLower) || artistLower.includes(strLower);
       });
+    });
   };
 
   const addChannelName = (songs: ISong[], channel: number): ISong[] => {
@@ -52,6 +55,8 @@ export function SongProvider({ children }: { children: ReactNode }) {
 
   const enrichSongWithDetails = async (song: ISong): Promise<ISongWithDetails> => {
     const selectedDate = getDate(song.starttimeutc);
+
+    // If it has been more than 30 days since the song aired, skip fetching program/episode details as the sound will no longer be available
     if (!song.channelId || !selectedDate || thirtyDayDiff(selectedDate)) return song;
 
     try {
@@ -77,7 +82,7 @@ export function SongProvider({ children }: { children: ReactNode }) {
 
       if (!matchingEpisode) return { ...song, program: matchingProgram };
 
-      // Calculate start time
+      // Calculate start time for playback
       const episodeStart = extractDateTime(matchingEpisode.broadcasttime.starttimeutc);
       const startTime = (songStart - episodeStart) / 1000;
 
@@ -99,20 +104,21 @@ export function SongProvider({ children }: { children: ReactNode }) {
     setError(null);
     
     try {
-      // Only use cache if the date is not today
+      // If date is today there still might be new songs, so skip cache
+      // If date is in the past, try to fetch from cache first before making new requests
       if (date && !isToday(date)) {
         const cachedSongs = await fetchSongsFromCache(date);
         if (cachedSongs) {
-          setSongs(cachedSongs as ISongWithDetails[]);
+          setSongs(cachedSongs);
           setIsLoading(false);
           return;
         }
       }
 
-      // If no cached data, fetch songs from all channels
+      // If date is today or no cached songs found, fetch song lists from API by looping over the channels
       const fetchPromises = Object.keys(channels).map(async (channel) => {
         try {
-          const channelId = +channel;
+          const channelId = Number(channel);
           const songsData = await fetchSongsForDate(channelId, date);
           return addChannelName(songsData, channelId);
         } catch (error) {
@@ -123,14 +129,14 @@ export function SongProvider({ children }: { children: ReactNode }) {
 
       const channelResults = await Promise.all(fetchPromises);
       
-      // Combine all songs and remove duplicates
+      // Combine all songs and remove duplicate and irrelevant finds
       allSongs = filterForSelected(cleanDuplicates(channelResults.flat()));
       
-      // Enrich songs with program and episode details
+      // Add with program and episode details so the song can be played back
       const enrichedSongs = await Promise.all(allSongs.map(song => enrichSongWithDetails(song))) as ISongWithDetails[];
       setSongs(enrichedSongs);
 
-      // Save the enriched songs to the database
+      // Save the enriched songs to the database cache for future use
       try {
         await saveSongsToDb(date, enrichedSongs);
       } catch (error) {

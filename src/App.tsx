@@ -7,13 +7,13 @@ import { Tab, ButtonOption } from "./models/interfaces";
 import texts from "./config/texts";
 
 const TAB_OPTIONS: ButtonOption<Tab>[] = [
-  { value: 'search', label: texts.tabs.search },
-  { value: 'history', label: texts.tabs.history }
+  { value: Tab.Search, label: texts.tabs.search },
+  { value: Tab.History, label: texts.tabs.history }
 ];
 
 function AppContent() {
   const { isLoading, error, songs } = useSongs();
-  const [activeTab, setActiveTab] = useState<Tab>('search');
+  const [activeTab, setActiveTab] = useState<Tab>(Tab.Search);
 
   return (
     <section className="hero has-background-warning-dark is-fullheight">
@@ -23,18 +23,18 @@ function AppContent() {
         </div>
       </div>
       <div className="hero-body is-align-items-flex-start">
-  <div className="container is-fluid no-side-padding">
+        <div className="container is-fluid no-side-padding">
           <TabButtons 
             options={TAB_OPTIONS} 
             selectedValue={activeTab} 
             onChange={value => setActiveTab(value)}
           />
 
-          {activeTab === 'search' && (
+          {activeTab === Tab.Search && (
             <SearchResults isLoading={isLoading} error={error} songs={songs} />
           )}
 
-          {activeTab === 'history' && <HistorySection />}
+          {activeTab === Tab.History && <HistorySection />}
         </div>
       </div>
     </section>

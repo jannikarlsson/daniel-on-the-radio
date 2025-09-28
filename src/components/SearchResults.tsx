@@ -17,7 +17,6 @@ function SearchResults({ isLoading, error, songs }: SearchResultsProps) {
       {error && (
         <div className="notification is-danger is-light mt-4">
           <div className="has-text-weight-bold">{texts.search.errorTitle}</div>
-          <div>{error}</div>
         </div>
       )}
       {isLoading ? (

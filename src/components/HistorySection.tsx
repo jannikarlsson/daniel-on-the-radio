@@ -21,7 +21,7 @@ function HistorySection() {
             const data = await fetchLatestFinds(count);
             setHistory(data);
         } catch (_error) { // eslint-disable-line no-unused-vars
-            setError('Failed to fetch history');
+            setError(texts.history.errorTitle);
         } finally {
             setIsLoading(false);
         }
@@ -35,7 +35,6 @@ function HistorySection() {
         return (
             <div className="notification is-danger is-light mt-4">
                 <div className="has-text-weight-bold">{texts.history.errorTitle}</div>
-                <div>{error}</div>
             </div>
         );
     }
