@@ -1,5 +1,5 @@
 import { ISongWithDetails } from "../models/interfaces";
-import { getTime, getDate } from "../utils/utils";
+import { getTime, getDate, thirtyDayDiff } from "../utils/utils";
 import texts from "../config/texts";
 
 function Song({ song }: { song: ISongWithDetails }) {
@@ -13,7 +13,7 @@ function Song({ song }: { song: ISongWithDetails }) {
                     <div className="is-size-6">{selectedDate}, {getTime(song.starttimeutc)}-{getTime(song.stoptimeutc)}</div>
                     <div>{song.title}</div>
                     <div>{song.artist}</div>
-                    {song.episode ? (
+                    {!thirtyDayDiff(selectedDate) && song.episode ? (
                         <audio src={song.episode.broadcast.broadcastfiles[0].url + "#t=" + (song.startTime ? song.startTime - 10 : 0)} controls className="mt-4" >
                             <code>{texts.song.audioFallback}</code>
                         </audio>

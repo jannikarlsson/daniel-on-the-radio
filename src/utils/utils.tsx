@@ -85,7 +85,7 @@ export const thirtyDayDiff = (day: string | null): boolean | null => {
         const today = new Date();
         const selectedDay = new Date(day);
         const thirtyDaysAgo = new Date(today);
-        thirtyDaysAgo.setDate(today.getDate() - 30);
+        thirtyDaysAgo.setDate(today.getDate() - 29);
         return thirtyDaysAgo > selectedDay;
     }
     return null;
