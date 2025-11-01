@@ -17,12 +17,14 @@ function AppContent() {
 
   return (
     <section className="hero has-background-warning-dark is-fullheight">
-      <div className="hero-head">
-        <div className="is-size-6 has-text-centered has-text-warning-dark p-4 has-background-warning-light">
-          {texts.app.title}
-        </div>
+      <div className="has-text-centered">
+        <img
+          src="/logo-text.png"
+          alt="Logo"
+          className="logo"
+        />
       </div>
-      <div className="hero-body is-align-items-flex-start">
+      <div className="hero-body is-align-items-flex-start hero-body-padding">
         <div className="container is-fluid no-side-padding">
           <TabButtons 
             options={TAB_OPTIONS} 

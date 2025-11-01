@@ -8,7 +8,7 @@ interface TabButtonsProps<T> {
 
 function TabButtons<T>({ options, selectedValue, onChange }: TabButtonsProps<T>) {
     return (
-        <div className="buttons has-addons is-centered">
+        <div className="buttons has-addons is-centered tab-buttons-equal mb-5">
             {options.map((option) => (
                 <button 
                     key={String(option.value)}
