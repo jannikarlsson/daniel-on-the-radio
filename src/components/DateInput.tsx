@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect } from 'react';
-import { BiSolidLeftArrow, BiSolidRightArrow } from 'react-icons/bi';
+import { BiChevronLeft, BiChevronRight } from 'react-icons/bi';
 import { useSongs } from '../contexts/SongContext';
 import { isToday } from '../utils/utils';
 
@@ -16,7 +16,7 @@ function DateInput() {
     const currentDate = new Date(date);
     const offset = direction === 'left' ? -1 : 1;
     currentDate.setDate(currentDate.getDate() + offset);
-    
+
     const formattedDate = currentDate.toISOString().split('T')[0];
     setDate(formattedDate);
   }
@@ -30,16 +30,32 @@ function DateInput() {
   }, [searchSongs])
 
   return (
-      <div className="is-flex is-flex-direction-row mt-5 has-text-success-light is-align-items-center">
-      <BiSolidLeftArrow className="is-flex mr-4 is-size-4 is-clickable" onClick={() => arrowNavigate('left')} />
+    <div className="date-row">
+      <button
+        type="button"
+        className="round-button"
+        aria-label="Föregående dag"
+        onClick={() => arrowNavigate('left')}
+      >
+        <BiChevronLeft size={28} />
+      </button>
       <input
-        className={`input date-input ${isDateToday() ? 'mr-4' : ''}`}
+        className="date-input"
         type="date"
+        aria-label="Datum"
         value={date}
         onChange={handleDateChange}
       />
-      {!isDateToday() && <BiSolidRightArrow className="is-flex ml-4 is-size-4 is-clickable" onClick={() => arrowNavigate('right')} />}
-      </div>
+      <button
+        type="button"
+        className="round-button"
+        aria-label="Nästa dag"
+        disabled={isDateToday()}
+        onClick={() => arrowNavigate('right')}
+      >
+        <BiChevronRight size={28} />
+      </button>
+    </div>
   );
 }
 

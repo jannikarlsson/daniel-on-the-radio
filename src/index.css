@@ -1,67 +1,327 @@
-@import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
+:root {
+  --ground: #946c00;
+  --cream: #fff6dc;
+  --ink: #2b1f00;
+  --muted: #6e5200;
+  --accent: #f4c430;
+  --track: rgba(43, 31, 0, 0.28);
+  --tint: rgba(255, 246, 220, 0.16);
+  --radius: 8px;
+  --radius-sm: 6px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
 body {
-  padding: 0;
-  margin-top: 0;
-  font-family: 'Inter', Arial, Helvetica, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  background: var(--ground);
+  color: var(--cream);
+  font-family: 'Inter', system-ui, Arial, sans-serif;
+  line-height: 1.5;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Layout */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 40px 28px 48px;
+}
+
+.app-header {
+  text-align: center;
 }
 
 .logo {
-  max-width: 75%;
+  display: block;
+  width: 62%;
+  height: auto;
   margin: 0 auto;
 }
 
-.tab-buttons-equal .button {
-  flex: 1 1 0;
+.app-content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
 }
 
-.hero-body-padding {
-  padding-top: 1rem;
+@media (min-width: 900px) {
+  .app {
+    display: grid;
+    grid-template-columns: 1fr 440px;
+    align-items: center;
+    gap: 120px;
+    max-width: 1100px;
+    min-height: 100vh;
+    padding: 64px 48px;
+  }
+
+  .logo {
+    width: 100%;
+    max-width: 440px;
+  }
 }
 
-.date-range {
-  column-gap: 1.5rem;
+/* Segmented control (tabs and history counts) */
+
+.segmented {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--radius);
+  background: var(--track);
 }
+
+.segmented-option {
+  flex: 1;
+  min-height: 44px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--cream);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.segmented-option.is-active {
+  background: var(--cream);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.segmented.is-accent .segmented-option.is-active {
+  background: var(--accent);
+}
+
+/* Date row */
+
+.date-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.round-button {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--tint);
+  color: var(--cream);
+}
+
+.round-button:disabled {
+  background: rgba(255, 246, 220, 0.08);
+  color: rgba(255, 246, 220, 0.45);
+}
+
+.date-input {
+  /* Chromium sizes the inner date field to its content and left-aligns it,
+     so the input itself is a centering flex container. */
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  min-width: 0;
+  height: 44px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--cream);
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Song cards */
 
 .song-list {
-  column-gap: 1.5rem;
-  margin-top: 1rem;
-}
-
-.has-background-success-dark {
-  height: 100vh;
-}
-
-.input-row {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.no-side-padding {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
+.song {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 28px;
+  border-radius: var(--radius);
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.song-meta {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.song-title {
+  margin: 0 0 8px;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.song-artist {
+  margin: 0;
+  font-size: 16px;
+  color: var(--muted);
+}
+
+.player {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(43, 31, 0, 0.15);
+}
+
+.player-button {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--cream);
+}
+
+.player-seek {
+  flex: 1;
+  min-width: 0;
+  height: 28px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  --progress: 0%;
+}
+
+.player-seek::-webkit-slider-runnable-track {
+  height: 4px;
+  background: linear-gradient(to right, var(--ink) var(--progress), rgba(43, 31, 0, 0.15) var(--progress));
+}
+
+.player-seek::-moz-range-track {
+  height: 4px;
+  background: rgba(43, 31, 0, 0.15);
+}
+
+.player-seek::-moz-range-progress {
+  height: 4px;
+  background: var(--ink);
+}
+
+.player-seek::-webkit-slider-thumb {
+  width: 14px;
+  height: 14px;
+  margin-top: -5px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ink);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.player-seek::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+.player-time {
+  font-size: 13px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.song-note {
+  margin: 0;
+  font-size: 14px;
+  font-style: italic;
+  color: var(--muted);
+}
+
+/* States */
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
+  color: var(--accent);
+  font-size: 72px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+
+.empty-small {
+  margin: 0;
+  text-align: center;
+}
+
+.error {
+  padding: 20px 28px;
+  border-radius: var(--radius);
+  background: #fde8e8;
+  color: #9b1c1c;
+  font-weight: 700;
 }
 
 .loader {
-    border: 5px solid #dbf1e4;
-    border-radius: 50%;
-    border-top: 5px solid goldenrod;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-    margin: 0 auto;
+  width: 40px;
+  height: 40px;
+  margin: 24px auto;
+  border: 5px solid var(--tint);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-
-/* Center the date (and calendar icon) in Chromium's native date input.
-   Chromium sizes the inner field to its content and left-aligns it, so the
-   input itself is made a centering flex container. */
-.date-input {
-  display: flex;
-  justify-content: center;
+  to {
+    transform: rotate(360deg);
+  }
 }

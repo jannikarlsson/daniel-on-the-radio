@@ -1,28 +1,36 @@
 import { ISongWithDetails } from "../models/interfaces";
 import { getTime, getDate, thirtyDayDiff } from "../utils/utils";
 import texts from "../config/texts";
+import AudioPlayer from "./AudioPlayer";
 
-function Song({ song }: { song: ISongWithDetails }) {
+interface SongProps {
+    song: ISongWithDetails;
+    showDate?: boolean;
+}
+
+function Song({ song, showDate = false }: SongProps) {
     const selectedDate = getDate(song.starttimeutc);
 
+    const meta = [
+        showDate ? selectedDate : null,
+        song.channel,
+        song.program?.title,
+        getTime(song.starttimeutc)?.slice(0, 5)
+    ].filter(Boolean).join(' · ');
+
     return (
-        <div className="card has-background-warning-light">
-            <div className="card-content">
-                <div className="content has-text-warning-dark">
-                    <div className="has-text-weight-bold">{song.channel}: {song.program?.title}</div>
-                    <div className="is-size-6">{selectedDate}, {getTime(song.starttimeutc)}-{getTime(song.stoptimeutc)}</div>
-                    <div>{song.title}</div>
-                    <div>{song.artist}</div>
-                    {!thirtyDayDiff(selectedDate) && song.episode ? (
-                        <audio src={song.episode.broadcast.broadcastfiles[0].url + "#t=" + (song.startTime ? song.startTime - 10 : 0)} controls className="mt-4" >
-                            <code>{texts.song.audioFallback}</code>
-                        </audio>
-                    ) : (
-                        <div className="is-italic mt-4">{texts.song.noAudio}</div>
-                    )}
-                </div>
+        <article className="song">
+            <div className="song-meta">{meta}</div>
+            <div>
+                <h2 className="song-title">{song.title}</h2>
+                <p className="song-artist">{song.artist}</p>
             </div>
-        </div>
+            {!thirtyDayDiff(selectedDate) && song.episode ? (
+                <AudioPlayer src={song.episode.broadcast.broadcastfiles[0].url + "#t=" + (song.startTime ? song.startTime - 10 : 0)} />
+            ) : (
+                <p className="song-note">{texts.song.noAudio}</p>
+            )}
+        </article>
     )
 }
 

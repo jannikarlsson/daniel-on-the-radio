@@ -32,40 +32,29 @@ function HistorySection() {
     }, [selectedCount]);
 
     if (error) {
-        return (
-            <div className="notification is-danger is-light mt-4">
-                <div className="has-text-weight-bold">{texts.history.errorTitle}</div>
-            </div>
-        );
+        return <div className="error" role="alert">{texts.history.errorTitle}</div>;
     }
 
     return (
-        <div className="mt-5">
+        <>
+            <TabButtons<CountOption>
+                accent
+                options={countOptions.map(count => ({
+                    value: count,
+                    label: count.toString()
+                }))}
+                selectedValue={selectedCount}
+                onChange={value => setSelectedCount(value)}
+            />
+
             {isLoading ? (
                 <Loader />
+            ) : history.length > 0 ? (
+                <SongList songs={history.flatMap(entry => entry.songs)} showDate />
             ) : (
-                <TabButtons<CountOption> 
-                    options={countOptions.map(count => ({
-                        value: count,
-                        label: count.toString()
-                    }))}
-                    selectedValue={selectedCount}
-                    onChange={value => setSelectedCount(value)}
-                />
+                <p className="empty-small" role="status">{texts.history.empty}</p>
             )}
-            
-            {!isLoading && (
-                <div className="content mt-4">
-                    {history.length > 0 ? (
-                        <SongList songs={history.flatMap(entry => entry.songs)} />
-                    ) : selectedCount ? (
-                        <div className="has-text-warning-light has-text-centered mt-4">
-                            {texts.history.empty}
-                        </div>
-                    ) : null}
-                </div>
-            )}
-        </div>
+        </>
     );
 }
 

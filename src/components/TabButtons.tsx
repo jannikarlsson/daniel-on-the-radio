@@ -4,15 +4,18 @@ interface TabButtonsProps<T> {
     options: ButtonOption<T>[];
     selectedValue: T | null;
     onChange: (value: T) => void; // eslint-disable-line no-unused-vars
+    accent?: boolean;
 }
 
-function TabButtons<T>({ options, selectedValue, onChange }: TabButtonsProps<T>) {
+function TabButtons<T>({ options, selectedValue, onChange, accent = false }: TabButtonsProps<T>) {
     return (
-        <div className="buttons has-addons is-centered tab-buttons-equal mb-5">
+        <div className={`segmented${accent ? ' is-accent' : ''}`}>
             {options.map((option) => (
-                <button 
+                <button
                     key={String(option.value)}
-                    className={`button ${selectedValue === option.value ? 'is-warning' : 'is-warning is-light'}`}
+                    type="button"
+                    className={`segmented-option${selectedValue === option.value ? ' is-active' : ''}`}
+                    aria-pressed={selectedValue === option.value}
                     onClick={() => onChange(option.value)}
                 >
                     {option.label}

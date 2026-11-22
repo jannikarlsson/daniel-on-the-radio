@@ -3,17 +3,18 @@ import { ISongWithDetails } from "../models/interfaces";
 
 interface SongListProps {
     songs: ISongWithDetails[];
+    showDate?: boolean;
 }
 
-function SongList({ songs }: SongListProps) {
+function SongList({ songs, showDate = false }: SongListProps) {
     return (
-        <div className="song-list is-centered">
+        <ul className="song-list">
             {songs.map((song, index) => (
-                <div key={index} className="mb-4">
-                    <Song song={song} />
-                </div>
+                <li key={index}>
+                    <Song song={song} showDate={showDate} />
+                </li>
             ))}
-        </div>
+        </ul>
     );
 }
 

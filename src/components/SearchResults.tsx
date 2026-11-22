@@ -15,18 +15,14 @@ function SearchResults({ isLoading, error, songs }: SearchResultsProps) {
     <>
       <DateInput />
       {error && (
-        <div className="notification is-danger is-light mt-4">
-          <div className="has-text-weight-bold">{texts.search.errorTitle}</div>
-        </div>
+        <div className="error" role="alert">{texts.search.errorTitle}</div>
       )}
       {isLoading ? (
-        <div className="mt-4">
-          <Loader />
-        </div>
+        <Loader />
       ) : songs.length > 0 ? (
         <SongList songs={songs} />
       ) : (
-  <div className="has-text-warning-light has-text-centered mt-4">{texts.search.empty}</div>
+        <div className="empty" role="status">{texts.search.empty}</div>
       )}
     </>
   );

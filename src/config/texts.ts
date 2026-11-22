@@ -12,7 +12,10 @@ const texts = {
   },
   song: {
     noAudio: "Det har gått längre tid än 30 dagar",
-    audioFallback: "Din webbläsare stöder inte ljudtaggar"
+    audioFallback: "Din webbläsare stöder inte ljudtaggar",
+    play: "Spela",
+    pause: "Pausa",
+    seek: "Sök i ljudet"
   },
   tabs: {
     search: "Sök",

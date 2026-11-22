@@ -16,30 +16,28 @@ function AppContent() {
   const [activeTab, setActiveTab] = useState<Tab>(Tab.Search);
 
   return (
-    <section className="hero has-background-warning-dark is-fullheight">
-      <div className="has-text-centered">
+    <main className="app">
+      <header className="app-header">
         <img
           src="/logo-text.png"
-          alt="Logo"
+          alt={texts.app.title}
           className="logo"
         />
-      </div>
-      <div className="hero-body is-align-items-flex-start hero-body-padding">
-        <div className="container is-fluid no-side-padding">
-          <TabButtons 
-            options={TAB_OPTIONS} 
-            selectedValue={activeTab} 
-            onChange={value => setActiveTab(value)}
-          />
+      </header>
+      <div className="app-content">
+        <TabButtons
+          options={TAB_OPTIONS}
+          selectedValue={activeTab}
+          onChange={value => setActiveTab(value)}
+        />
 
-          {activeTab === Tab.Search && (
-            <SearchResults isLoading={isLoading} error={error} songs={songs} />
-          )}
+        {activeTab === Tab.Search && (
+          <SearchResults isLoading={isLoading} error={error} songs={songs} />
+        )}
 
-          {activeTab === Tab.History && <HistorySection />}
-        </div>
+        {activeTab === Tab.History && <HistorySection />}
       </div>
-    </section>
+    </main>
   );
 }
 

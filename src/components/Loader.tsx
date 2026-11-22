@@ -1,9 +1,5 @@
 function Loader() {
-  return (
-    <div className="has-text-centered p-4">
-      <div className="loader"></div>
-    </div>
-  );
+  return <div className="loader" role="status" aria-label="Laddar"></div>;
 }
 
 export default Loader;
