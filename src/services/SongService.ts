@@ -158,8 +158,11 @@ export interface IHistoryEntry {
 export const fetchLatestFinds = async (count: number = 10): Promise<IHistoryEntry[]> => {
   try {
     const response = await fetch(`/.netlify/functions/getLatestFinds?count=${count}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch latest finds (${response.status})`);
+    }
     const data = await response.json();
-    return data.results;
+    return data.results ?? [];
   } catch (error) {
     console.warn('Error fetching latest finds:', error);
     throw error;
