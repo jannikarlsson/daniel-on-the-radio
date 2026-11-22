@@ -4,6 +4,7 @@ import { IChannelMap } from "../models/interfaces";
 // Channels added to the array will be used in the aggregated song list
 // The channel ID can be found in the docs https://api.sr.se/api/documentation/v2/metoder/kanaler.html
 export const channels: IChannelMap = {
+    4951: 'P4 Plus',
     2562: 'P2 Musik',
     207: 'P4 Malmöhus',
     211: 'P4 Kristianstad',
