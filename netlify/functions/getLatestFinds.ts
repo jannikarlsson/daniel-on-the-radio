@@ -17,6 +17,7 @@ export const handler: Handler = async (event) => {
 
     return jsonResponse(200, { results });
   } catch (error) {
+    console.error(error);
     return errorResponse(500, 'Database Error');
   }
 };
