@@ -33,7 +33,7 @@ function DateInput() {
       <div className="is-flex is-flex-direction-row mt-5 has-text-success-light is-align-items-center">
       <BiSolidLeftArrow className="is-flex mr-4 is-size-4 is-clickable" onClick={() => arrowNavigate('left')} />
       <input
-        className={`input is-flex ${isDateToday() ? 'mr-4' : ''}`}
+        className={`input date-input ${isDateToday() ? 'mr-4' : ''}`}
         type="date"
         value={date}
         onChange={handleDateChange}

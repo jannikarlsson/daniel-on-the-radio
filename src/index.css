@@ -56,3 +56,12 @@ body {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+
+/* Center the date (and calendar icon) in Chromium's native date input.
+   Chromium sizes the inner field to its content and left-aligns it, so the
+   input itself is made a centering flex container. */
+.date-input {
+  display: flex;
+  justify-content: center;
+}
